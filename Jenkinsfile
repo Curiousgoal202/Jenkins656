@@ -15,7 +15,7 @@ pipeline {
                 pkill -f "python3 -m http.server" || true
 
                 # Go to Jenkins workspace
-                cd $WORKSPACE
+                cd "$WORKSPACE"
 
                 # Start new Python web server on port 8085
                 nohup python3 -m http.server 8085 > server.log 2>&1 &
