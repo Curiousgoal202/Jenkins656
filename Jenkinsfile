@@ -18,7 +18,7 @@ pipeline {
                 cd "$WORKSPACE"
 
                 # Start new Python web server on port 8085
-                nohup python3 -m http.server 8085 > server.log 2>&1 &
+                nohup setsid python3 -m http.server 8085 > server.log 2>&1 &
                 '''
             }
         }
