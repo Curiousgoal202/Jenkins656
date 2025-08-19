@@ -1,0 +1,44 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git 'https://github.com/Curiousgoal202/Jenkins656.git'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                sh 'mvn clean package'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                sh 'mvn test'
+            }
+        }
+
+        stage('Package') {
+            steps {
+                archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
+            }
+        }
+
+        stage('Deploy the Server') {
+            steps {
+                sh '''
+                # Kill old server if running
+                pkill -f "python3 -m http.server" || true
+
+                # Go to Jenkins workspace
+                cd $WORKSPACE
+
+                # Start new Python web server on port 8085
+                nohup python3 -m http.server 8085 > server.log 2>&1 &
+                '''
+            }
+        }
+    }
+}
